@@ -50,28 +50,6 @@ body {
 }
 */
 
-/* Fix AR/VR container to not take full screen */
-#ar-vr-container {
-    position: relative;
-    width: 100%;
-    height: 70vh;  /* CHANGE from 100% to 70vh */
-    margin: 20px 0;
-}
-
-/* Ensure the AR/VR page content can scroll */
-#arvr.page {
-    overflow-y: auto;
-    height: auto;
-    min-height: 100vh;
-}
-
-/* Make sure the AR/VR canvas is contained */
-#renderCanvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-    border-radius: 10px;
-}
 
         h1, h2, h3, h4 {
             font-family: 'Orbitron', sans-serif;
@@ -475,16 +453,26 @@ body {
         }
 
         #ar-vr-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
+    position: relative;
+    width: 100%;
+    height: 70vh;  /* CHANGE from 100% to 70vh */
+    margin: 20px 0;
+}
 
-        #renderCanvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
+/* Ensure the AR/VR page content can scroll */
+#arvr.page {
+    overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
+}
+
+/* Make sure the AR/VR canvas is contained */
+#renderCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 10px;
+}
 
         .ui-overlay {
             position: absolute;
