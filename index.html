@@ -6,6 +6,10 @@
     <title>VELOCITY | Custom Supersport Motorcycles</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    
     <style>
         :root {
             --primary: #ff2a00;
@@ -426,7 +430,171 @@
         .option-btn:hover:not(.active) {
             background: rgba(255, 255, 255, 0.2);
         }
+ * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #ar-vr-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .mode-selector {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            pointer-events: all;
+        }
+
+        .mode-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mode-btn:hover {
+            background: #555;
+        }
+
+        .mode-btn.active {
+            background: #ff2a00;
+        }
+
+        .info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 300px;
+            pointer-events: all;
+        }
+
+        .motorcycle-info {
+            margin-top: 10px;
+        }
+
+        .motorcycle-info h3 {
+            color: #ff2a00;
+            margin-bottom: 10px;
+        }
+
+        .controls-info {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 250px;
+        }
+
+        .controls-info h4 {
+            color: #ff2a00;
+            margin-bottom: 10px;
+        }
+
+        .controls-info ul {
+            list-style-type: none;
+        }
+
+        .controls-info li {
+            margin-bottom: 5px;
+        }
+
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .loading-bar-container {
+            width: 300px;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .loading-bar {
+            height: 100%;
+            background: #ff2a00;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .xr-button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff2a00;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            pointer-events: all;
+            font-weight: bold;
+            z-index: 11;
+        }
+
+        .notification {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 42, 0, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 300px;
+            pointer-events: all;
+            display: none;
+        }
         /* Contact Section */
         .contact-container {
             display: grid;
@@ -860,14 +1028,16 @@
     <header id="header">
         <div class="container nav-container">
             <a href="#" class="logo" data-page="home">VELOCITY<span>MOTO</span></a>
-            <ul class="nav-links">
-                <li><a href="#" data-page="home">Home</a></li>
-                <li><a href="#" data-page="models">Models</a></li>
-                <li><a href="#" data-page="customization">Customize</a></li>
-                <li><a href="#" data-page="gallery">Gallery</a></li>
-                <li><a href="#" data-page="about">About</a></li>
-                <li><a href="#" data-page="contact">Contact</a></li>
-            </ul>
+          <!-- Add this to your existing navigation -->
+<ul class="nav-links">
+    <li><a href="#" data-page="home">Home</a></li>
+    <li><a href="#" data-page="models">Models</a></li>
+    <li><a href="#" data-page="customization">Customize</a></li>
+    <li><a href="#" data-page="gallery">Gallery</a></li>
+    <li><a href="#" data-page="arvr">AR/VR Showroom</a></li> <!-- NEW -->
+    <li><a href="#" data-page="about">About</a></li>
+    <li><a href="#" data-page="contact">Contact</a></li>
+</ul>
             <button class="cta-button" data-page="customization">Build Yours</button>
         </div>
     </header>
@@ -1046,7 +1216,113 @@
                 </div>
             </div>
         </section>
+<!-- Add this with your other pages -->
+<div id="arvr" class="page">
+    <section class="arvr-showroom">
+        <div class="container">
+            <div class="section-title">
+                <h2>Immersive AR/VR Showroom</h2>
+                <p>Experience our motorcycles in stunning 3D. Explore every detail in virtual reality or augmented reality.</p>
+            </div>
+            
+            <div class="arvr-container">
+                <div id="ar-vr-interface" style="position: relative; width: 100%; height: 70vh;">
+                    <!-- The AR/VR code will be loaded here -->
+                     <div id="ar-vr-container">
+        <canvas id="renderCanvas"></canvas>
+        
+        <div class="ui-overlay">
+            <div class="mode-selector">
+                <h3>Experience Mode</h3>
+                <button id="desktopMode" class="mode-btn active">Desktop</button>
+                <button id="vrMode" class="mode-btn">VR</button>
+                <button id="arMode" class="mode-btn">AR</button>
+            </div>
+            
+            <div class="info-panel">
+                <h3>VELOCITY MOTO Showroom</h3>
+                <div class="motorcycle-info">
+                    <h3 id="bikeName">Vulcan S1</h3>
+                    <p id="bikeDescription">The ultimate street predator with aggressive styling and track-ready performance.</p>
+                    <div class="specs">
+                        <p><strong>Power:</strong> <span id="bikePower">210 HP</span></p>
+                        <p><strong>Weight:</strong> <span id="bikeWeight">165 kg</span></p>
+                        <p><strong>Top Speed:</strong> <span id="bikeSpeed">300 km/h</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="controls-info">
+                <h4>Controls</h4>
+                <ul>
+                    <li><strong>Desktop:</strong> Mouse to look around, WASD to move</li>
+                    <li><strong>VR:</strong> Use controllers to move and interact</li>
+                    <li><strong>AR:</strong> Move device to explore, tap to place objects</li>
+                </ul>
+            </div>
+            
+            <button id="enterXR" class="xr-button">ENTER VR/AR</button>
+            
+            <div class="notification" id="notification">
+                <p>AR/VR mode activated! Move around to explore.</p>
+            </div>
+        </div>
+        
+        <div class="loading-screen" id="loadingScreen">
+            <h2>VELOCITY MOTO AR/VR SHOWROOM</h2>
+            <p>Loading immersive experience...</p>
+            <div class="loading-bar-container">
+                <div class="loading-bar" id="loadingBar"></div>
+            </div>
+        </div>
+    </div>
 
+                    <canvas id="renderCanvas"></canvas>
+                    
+                    <div class="arvr-controls">
+                        <button class="cta-button" id="enterVR">ENTER VR</button>
+                        <button class="cta-button" id="enterAR">ENTER AR</button>
+                        <button class="cta-button" id="resetView">RESET VIEW</button>
+                    </div>
+                    
+                    <div class="loading-screen" id="arvrLoading">
+                        <h3>Loading Immersive Experience...</h3>
+                        <div class="loading-bar">
+                            <div class="progress"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arvr-instructions">
+                    <h3>How to Experience</h3>
+                    <div class="instruction-cards">
+                        <div class="instruction-card">
+                            <div class="instruction-icon">
+                                <i class="fas fa-desktop"></i>
+                            </div>
+                            <h4>Desktop</h4>
+                            <p>Use mouse to look around and WASD keys to move</p>
+                        </div>
+                        <div class="instruction-card">
+                            <div class="instruction-icon">
+                                <i class="fas fa-vr-cardboard"></i>
+                            </div>
+                            <h4>VR Headset</h4>
+                            <p>Connect your VR headset for full immersion</p>
+                        </div>
+                        <div class="instruction-card">
+                            <div class="instruction-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h4>Mobile AR</h4>
+                            <p>View motorcycles in your real environment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
         <!-- Contact Section -->
         <section id="contact-section">
             <div class="container">
@@ -1823,6 +2099,476 @@
                 }
             });
         }
+             // Main application variables
+        let scene, camera, renderer, controls;
+        let vrButton, arButton;
+        let currentMode = 'desktop';
+        let motorcycles = [];
+        let currentMotorcycleIndex = 0;
+
+        // Motorcycle data
+        const motorcycleData = [
+            {
+                name: "Vulcan S1",
+                description: "The ultimate street predator with aggressive styling and track-ready performance.",
+                power: "210 HP",
+                weight: "165 kg",
+                speed: "300 km/h",
+                color: 0x222222
+            },
+            {
+                name: "Apex R9",
+                description: "Precision engineering meets aerodynamic perfection for the ultimate track weapon.",
+                power: "240 HP",
+                weight: "152 kg",
+                speed: "325 km/h",
+                color: 0x2a2a2a
+            },
+            {
+                name: "Nitro ZX",
+                description: "Unleash pure adrenaline with our most powerful and technologically advanced model.",
+                power: "275 HP",
+                weight: "148 kg",
+                speed: "350 km/h",
+                color: 0x1a1a1a
+            }
+        ];
+
+        // Initialize the application
+        function init() {
+            // Create scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a0a);
+            
+            // Create camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 1.6, 5);
+            
+            // Create renderer
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: document.getElementById('renderCanvas'),
+                antialias: true 
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.xr.enabled = true;
+            
+            // Add orbit controls for desktop mode
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            
+            // Setup lighting
+            setupLighting();
+            
+            // Create environment
+            createEnvironment();
+            
+            // Create motorcycles
+            createMotorcycles();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize);
+            
+            // Start animation loop
+            animate();
+            
+            // Hide loading screen after a delay (simulating loading)
+            setTimeout(() => {
+                document.getElementById('loadingScreen').style.display = 'none';
+                updateLoadingBar(100);
+            }, 2000);
+        }
+
+        // Setup lighting for the scene
+        function setupLighting() {
+            // Ambient light
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+            scene.add(ambientLight);
+            
+            // Directional light
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 10, 5);
+            scene.add(directionalLight);
+            
+            // Point lights for showroom effect
+            const pointLight1 = new THREE.PointLight(0xff2a00, 0.5, 20);
+            pointLight1.position.set(5, 3, 5);
+            scene.add(pointLight1);
+            
+            const pointLight2 = new THREE.PointLight(0x00aaff, 0.5, 20);
+            pointLight2.position.set(-5, 3, -5);
+            scene.add(pointLight2);
+        }
+
+        // Create the showroom environment
+        function createEnvironment() {
+            // Floor
+            const floorGeometry = new THREE.PlaneGeometry(20, 20);
+            const floorMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x222222,
+                roughness: 0.8,
+                metalness: 0.2
+            });
+            const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+            floor.rotation.x = -Math.PI / 2;
+            scene.add(floor);
+            
+            // Showroom walls (simplified)
+            const wallGeometry = new THREE.BoxGeometry(20, 10, 0.5);
+            const wallMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x1a1a1a,
+                roughness: 0.7,
+                metalness: 0.1
+            });
+            
+            const backWall = new THREE.Mesh(wallGeometry, wallMaterial);
+            backWall.position.set(0, 5, -10);
+            scene.add(backWall);
+            
+            const leftWall = new THREE.Mesh(wallGeometry, wallMaterial);
+            leftWall.rotation.y = Math.PI / 2;
+            leftWall.position.set(-10, 5, 0);
+            scene.add(leftWall);
+            
+            const rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
+            rightWall.rotation.y = Math.PI / 2;
+            rightWall.position.set(10, 5, 0);
+            scene.add(rightWall);
+            
+            // Ceiling
+            const ceilingGeometry = new THREE.PlaneGeometry(20, 20);
+            const ceilingMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x151515,
+                roughness: 0.9,
+                metalness: 0.1
+            });
+            const ceiling = new THREE.Mesh(ceilingGeometry, ceilingMaterial);
+            ceiling.rotation.x = Math.PI / 2;
+            ceiling.position.set(0, 10, 0);
+            scene.add(ceiling);
+            
+            // Display platforms for motorcycles
+            for (let i = 0; i < 3; i++) {
+                const platformGeometry = new THREE.CylinderGeometry(1.5, 1.5, 0.2, 32);
+                const platformMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x333333,
+                    roughness: 0.5,
+                    metalness: 0.5
+                });
+                const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+                platform.position.set((i - 1) * 5, 0.1, 0);
+                scene.add(platform);
+                
+                // Add platform rim
+                const rimGeometry = new THREE.TorusGeometry(1.5, 0.1, 16, 100);
+                const rimMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xff2a00,
+                    roughness: 0.3,
+                    metalness: 0.7
+                });
+                const rim = new THREE.Mesh(rimGeometry, rimMaterial);
+                rim.rotation.x = Math.PI / 2;
+                rim.position.set((i - 1) * 5, 0.2, 0);
+                scene.add(rim);
+            }
+            
+            // Add some decorative elements
+            addDecorativeElements();
+        }
+
+        // Add decorative elements to the showroom
+        function addDecorativeElements() {
+            // Brand logo on the wall
+            const logoGeometry = new THREE.PlaneGeometry(3, 1);
+            const logoMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0xff2a00,
+                side: THREE.DoubleSide
+            });
+            const logo = new THREE.Mesh(logoGeometry, logoMaterial);
+            logo.position.set(0, 7, -9.9);
+            scene.add(logo);
+            
+            // Add text to logo
+            // In a real implementation, you would use Three.js text geometry
+            // For this demo, we'll use a simple plane
+            
+            // Lighting fixtures
+            const lightFixtureGeometry = new THREE.SphereGeometry(0.3, 16, 16);
+            const lightFixtureMaterial = new THREE.MeshBasicMaterial({ color: 0xffffaa });
+            
+            for (let i = -2; i <= 2; i++) {
+                for (let j = -2; j <= 2; j++) {
+                    if (Math.abs(i) === 2 || Math.abs(j) === 2) {
+                        const lightFixture = new THREE.Mesh(lightFixtureGeometry, lightFixtureMaterial);
+                        lightFixture.position.set(i * 4, 9.5, j * 4);
+                        scene.add(lightFixture);
+                    }
+                }
+            }
+        }
+
+        // Create motorcycle models
+        function createMotorcycles() {
+            for (let i = 0; i < motorcycleData.length; i++) {
+                const bikeData = motorcycleData[i];
+                
+                // Create a simplified motorcycle model
+                // In a real implementation, you would load 3D models
+                const motorcycleGroup = new THREE.Group();
+                
+                // Motorcycle body
+                const bodyGeometry = new THREE.BoxGeometry(2, 0.5, 0.8);
+                const bodyMaterial = new THREE.MeshStandardMaterial({ 
+                    color: bikeData.color,
+                    roughness: 0.3,
+                    metalness: 0.7
+                });
+                const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+                motorcycleGroup.add(body);
+                
+                // Motorcycle seat
+                const seatGeometry = new THREE.BoxGeometry(0.8, 0.2, 0.5);
+                const seatMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x111111,
+                    roughness: 0.8,
+                    metalness: 0.1
+                });
+                const seat = new THREE.Mesh(seatGeometry, seatMaterial);
+                seat.position.set(0, 0.35, 0.1);
+                motorcycleGroup.add(seat);
+                
+                // Front wheel
+                const wheelGeometry = new THREE.CylinderGeometry(0.4, 0.4, 0.2, 16);
+                const wheelMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x333333,
+                    roughness: 0.5,
+                    metalness: 0.5
+                });
+                const frontWheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+                frontWheel.rotation.z = Math.PI / 2;
+                frontWheel.position.set(0.8, -0.4, 0);
+                motorcycleGroup.add(frontWheel);
+                
+                // Rear wheel
+                const rearWheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+                rearWheel.rotation.z = Math.PI / 2;
+                rearWheel.position.set(-0.8, -0.4, 0);
+                motorcycleGroup.add(rearWheel);
+                
+                // Position the motorcycle
+                motorcycleGroup.position.set((i - 1) * 5, 0.7, 0);
+                motorcycleGroup.userData = bikeData;
+                
+                scene.add(motorcycleGroup);
+                motorcycles.push(motorcycleGroup);
+            }
+            
+            // Set the first motorcycle as active
+            setActiveMotorcycle(0);
+        }
+
+        // Set the active motorcycle and update UI
+        function setActiveMotorcycle(index) {
+            currentMotorcycleIndex = index;
+            const bikeData = motorcycleData[index];
+            
+            // Update UI
+            document.getElementById('bikeName').textContent = bikeData.name;
+            document.getElementById('bikeDescription').textContent = bikeData.description;
+            document.getElementById('bikePower').textContent = bikeData.power;
+            document.getElementById('bikeWeight').textContent = bikeData.weight;
+            document.getElementById('bikeSpeed').textContent = bikeData.speed;
+            
+            // Highlight active motorcycle (visual feedback)
+            motorcycles.forEach((bike, i) => {
+                if (i === index) {
+                    bike.children[0].material.emissive = new THREE.Color(0x333333);
+                } else {
+                    bike.children[0].material.emissive = new THREE.Color(0x000000);
+                }
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Mode selector buttons
+            document.getElementById('desktopMode').addEventListener('click', () => switchMode('desktop'));
+            document.getElementById('vrMode').addEventListener('click', () => switchMode('vr'));
+            document.getElementById('arMode').addEventListener('click', () => switchMode('ar'));
+            
+            // XR button
+            document.getElementById('enterXR').addEventListener('click', enterXR);
+            
+            // Keyboard controls for desktop mode
+            document.addEventListener('keydown', handleKeyDown);
+            
+            // Mouse click for selecting motorcycles
+            renderer.domElement.addEventListener('click', handleClick, false);
+        }
+
+        // Switch between different experience modes
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            // Update UI
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(mode + 'Mode').classList.add('active');
+            
+            // Update controls based on mode
+            if (mode === 'desktop') {
+                controls.enabled = true;
+                document.getElementById('enterXR').style.display = 'block';
+            } else {
+                controls.enabled = false;
+                document.getElementById('enterXR').style.display = 'block';
+            }
+            
+            showNotification(`Switched to ${mode.toUpperCase()} mode`);
+        }
+
+        // Handle keyboard input for desktop mode
+        function handleKeyDown(event) {
+            if (currentMode !== 'desktop') return;
+            
+            const moveSpeed = 0.2;
+            
+            switch(event.key) {
+                case 'w':
+                case 'ArrowUp':
+                    camera.position.x -= Math.sin(camera.rotation.y) * moveSpeed;
+                    camera.position.z -= Math.cos(camera.rotation.y) * moveSpeed;
+                    break;
+                case 's':
+                case 'ArrowDown':
+                    camera.position.x += Math.sin(camera.rotation.y) * moveSpeed;
+                    camera.position.z += Math.cos(camera.rotation.y) * moveSpeed;
+                    break;
+                case 'a':
+                case 'ArrowLeft':
+                    camera.position.x -= Math.cos(camera.rotation.y) * moveSpeed;
+                    camera.position.z += Math.sin(camera.rotation.y) * moveSpeed;
+                    break;
+                case 'd':
+                case 'ArrowRight':
+                    camera.position.x += Math.cos(camera.rotation.y) * moveSpeed;
+                    camera.position.z -= Math.sin(camera.rotation.y) * moveSpeed;
+                    break;
+                case ' ':
+                    // Space bar - cycle through motorcycles
+                    currentMotorcycleIndex = (currentMotorcycleIndex + 1) % motorcycles.length;
+                    setActiveMotorcycle(currentMotorcycleIndex);
+                    break;
+            }
+        }
+
+        // Handle mouse clicks for selecting motorcycles
+        function handleClick(event) {
+            if (currentMode !== 'desktop') return;
+            
+            const mouse = new THREE.Vector2();
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            const raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouse, camera);
+            
+            const intersects = raycaster.intersectObjects(motorcycles);
+            
+            if (intersects.length > 0) {
+                const clickedMotorcycle = intersects[0].object.parent;
+                const index = motorcycles.indexOf(clickedMotorcycle);
+                if (index !== -1) {
+                    setActiveMotorcycle(index);
+                }
+            }
+        }
+
+        // Enter XR mode (VR or AR)
+        function enterXR() {
+            if (currentMode === 'vr') {
+                // Enter VR session
+                if (navigator.xr) {
+                    renderer.xr.setSession(renderer.xr.getSession())
+                        .then(() => {
+                            showNotification('VR session started');
+                        })
+                        .catch(err => {
+                            console.error('Error starting VR session:', err);
+                            showNotification('VR not available on this device');
+                        });
+                } else {
+                    showNotification('WebXR not supported in this browser');
+                }
+            } else if (currentMode === 'ar') {
+                // Enter AR session
+                if (navigator.xr) {
+                    // This would require a more complex implementation for AR
+                    showNotification('AR mode would require additional implementation');
+                } else {
+                    showNotification('WebXR not supported in this browser');
+                }
+            }
+        }
+
+        // Show notification message
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.querySelector('p').textContent = message;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Update loading bar progress
+        function updateLoadingBar(percent) {
+            document.getElementById('loadingBar').style.width = percent + '%';
+        }
+
+        // Handle window resize
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Rotate motorcycles slowly
+            motorcycles.forEach((motorcycle, index) => {
+                motorcycle.rotation.y += 0.005;
+            });
+            
+            // Update controls if enabled
+            if (controls.enabled) {
+                controls.update();
+            }
+            
+            // Render the scene
+            renderer.render(scene, camera);
+        }
+
+        // Simulate loading process
+        let loadProgress = 0;
+        const loadingInterval = setInterval(() => {
+            loadProgress += 5;
+            updateLoadingBar(loadProgress);
+            
+            if (loadProgress >= 90) {
+                clearInterval(loadingInterval);
+            }
+        }, 100);
+
+        // Initialize the application when the page loads
+        window.addEventListener('load', init);
+  
     </script>
 </body>
 </html>
