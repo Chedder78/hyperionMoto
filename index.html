@@ -27,13 +27,51 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Exo 2', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
+        /* Fix the body scrolling */
+body {
+    font-family: 'Exo 2', sans-serif;
+    background-color: var(--dark-bg);
+    color: var(--text);
+    overflow-x: hidden;
+    overflow-y: auto;  /* ADD THIS */
+    line-height: 1.6;
+    height: auto;  /* REMOVE fixed height */
+    min-height: 100vh; /* USE min-height instead */
+}
+
+/* Remove the duplicate body style entirely */
+/* DELETE this entire block:
+body {
+    font-family: 'Arial', sans-serif;
+    background: #0a0a0a;
+    color: #fff;
+    overflow: hidden;
+    height: 100vh;
+}
+*/
+
+/* Fix AR/VR container to not take full screen */
+#ar-vr-container {
+    position: relative;
+    width: 100%;
+    height: 70vh;  /* CHANGE from 100% to 70vh */
+    margin: 20px 0;
+}
+
+/* Ensure the AR/VR page content can scroll */
+#arvr.page {
+    overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
+}
+
+/* Make sure the AR/VR canvas is contained */
+#renderCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 10px;
+}
 
         h1, h2, h3, h4 {
             font-family: 'Orbitron', sans-serif;
@@ -434,14 +472,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background: #0a0a0a;
-            color: #fff;
-            overflow: hidden;
-            height: 100vh;
         }
 
         #ar-vr-container {
@@ -1276,14 +1306,6 @@
             </div>
         </div>
     </div>
-
-                    <canvas id="renderCanvas"></canvas>
-                    
-                    <div class="arvr-controls">
-                        <button class="cta-button" id="enterVR">ENTER VR</button>
-                        <button class="cta-button" id="enterAR">ENTER AR</button>
-                        <button class="cta-button" id="resetView">RESET VIEW</button>
-                    </div>
                     
                     <div class="loading-screen" id="arvrLoading">
                         <h3>Loading Immersive Experience...</h3>
